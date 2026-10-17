@@ -1,0 +1,48 @@
+﻿# Local secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+service-account*.json
+.aws/
+.codex/
+.agents/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Dependencies, generated output, logs, and archives
+node_modules/
+.cache/
+coverage/
+dist/
+build/
+*.log
+*.zip
+*.tmp
+*.bak
+*.swp
+
+# Local verification reports and temporary test helpers
+/QA.md
+/.violet-qa/
+/.*-baseline.json
+/.*-before.json
+/.test-*.cjs
+/.check-*.cjs
+/.verify-*.cjs
+/.implement-*.cjs
+
+# Retired concept artwork; the portfolio uses real screenshots
+/assets/images/ledgix-placeholder.svg
+/assets/images/burp-placeholder.svg
+/assets/images/sea-urchin-placeholder.svg
