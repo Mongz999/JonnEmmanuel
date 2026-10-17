@@ -1,4 +1,4 @@
-﻿# VYSTRALYN. — Beyond the Code.
+﻿# JONN. — Beyond the Code.
 
 An interactive personal developer portfolio by **Jonn Emmanuel A. Renejane**, a BS Information Technology student at the University of Cebu in Cebu City, Philippines.
 
@@ -27,7 +27,7 @@ index.html                     Single-page content and dialog markup
 css/style.css                  Layout, themes, and animations
 js/script.js                   Portfolio data and page interactions
 js/ledgix.js                   Shared showcase data and gallery logic for all three projects
-assets/icons/favicon.svg       VYSTRALYN favicon
+assets/icons/favicon.svg       JE monogram favicon
 assets/images/profile.jpg      Original portrait
 assets/projects/ledgix/         Eight Ledgix screenshots
 assets/projects/burp/           Two BURP! screenshots
@@ -46,16 +46,16 @@ The showcases display static captures of the actual applications; they do not si
 
 ## GitHub Pages
 
-Repository: [Mongz999/vystralyn](https://github.com/Mongz999/vystralyn)
+Repository: [Mongz999/JonnEmmanuel](https://github.com/Mongz999/JonnEmmanuel)
 
 After the source has been pushed:
 
 1. Open the repository's **Settings → Pages**.
 2. Choose **Deploy from a branch**.
 3. Select **main** and **/ (root)**, then save.
-4. When GitHub finishes deploying, the expected address is **https://mongz999.github.io/vystralyn/**.
+4. When GitHub finishes deploying, the expected address is **https://mongz999.github.io/JonnEmmanuel/**.
 
-This README does not assert that Pages is already enabled. `index.html` belongs at the repository root. Asset paths are relative so the site can run from the `/vystralyn/` project subdirectory.
+This README does not assert that Pages is already enabled. `index.html` belongs at the repository root. Asset paths are relative so the site can run from the `/JonnEmmanuel/` project subdirectory.
 
 ## Presentation and verification
 
@@ -63,4 +63,4 @@ A suggested 45-second tour: start with the portrait and energy orb, reveal a fun
 
 Before presenting, check the site in your browser at desktop and mobile widths, in both themes. Try keyboard navigation, project zoom and closing, Journey controls, and reduced motion. Automated source checks do not replace visual browser testing.
 
-Local QA notes, temporary helpers, unused concept illustrations, editor settings, and secret files are excluded by `.gitignore`. The original local folder name `violet-universe` and saved-theme key `violet-theme` are retained for compatibility; the public website identity is VYSTRALYN.
+Local QA notes, temporary helpers, unused concept illustrations, editor settings, and secret files are excluded by `.gitignore`. The original local folder name `violet-universe` and saved-theme key `violet-theme` are retained for compatibility; the public website identity is JONN., the personal portfolio of Jonn Emmanuel.
