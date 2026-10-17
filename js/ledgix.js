@@ -30,6 +30,7 @@ const projectShowcases = {
     name:'Ledgix', key:'ledgix', type:'Accounting Management System', tagline:'Every Entry Counts. Every Balance Matters.',
     description:'Ledgix is an accounting management application designed to simplify journal recording, account balance verification, and financial reporting through an organized, user-friendly interface.',
     directory:'assets/projects/ledgix/',screenshots:ledgixDefaultScreenshots,filters:ledgixDefaultFilters,
+    sourceUrl:'https://github.com/Mongz999/ledgix',
     technologies:['HTML','CSS','JavaScript'],
     features:['Journal entry management','Compound accounting entries','Merchandise and credit transactions','Trial balance verification','Adjusting journal entries','Financial statement generation','Saved journal workspaces','Local data backup and restore']
   },
@@ -37,6 +38,7 @@ const projectShowcases = {
     name:'BURP!', key:'burp',type:'Canteen Point-of-Sale System',tagline:'Good Food, Good Mood!',
     description:'BURP! is a desktop-based canteen point-of-sale system designed to simplify food ordering, cart management, checkout calculations, and transaction recording through an organized interface.',
     directory:'assets/projects/burp/',
+    sourceUrl:'https://github.com/Mongz999/BURPSystem',
     screenshots:[
       {file:'pos-dashboard.png',title:'POS Dashboard',category:'Point of Sale',description:'Manage canteen products, search menu items, filter categories, add orders to the cart, calculate totals, and process customer transactions.'},
       {file:'login-screen.png',title:'Login Screen',category:'User Access',description:'Access the canteen management system through a dedicated username and password login interface.'}
@@ -64,7 +66,7 @@ function setLedgixZoom(zoomed, restoreFocus = false) {
 function renderLedgixThumbnails() {
   $('#ledgix-thumbnails').innerHTML = ledgixFilters[ledgixFilter].map(index => {
     const screen = ledgixScreenshots[index];
-    return `<button type="button" class="ledgix-thumb" data-ledgix-screen="${index}" aria-label="Show screenshot ${index + 1}: ${safeText(screen.title)}" aria-current="${index === ledgixIndex ? 'true' : 'false'}"><img src="${ledgixAsset(screen)}" alt="" width="120" height="72" loading="lazy" decoding="async"><span>${String(index + 1).padStart(2,'0')} · ${safeText(screen.title)}</span></button>`;
+    return `<button type="button" class="ledgix-thumb" data-ledgix-screen="${index}" aria-label="Show screenshot ${index + 1}: ${safeText(screen.title)}" aria-current="${index === ledgixIndex ? 'true' : 'false'}"><img src="${activeShowcase.directory}thumbnails/${screen.file}" alt="" width="120" height="72" loading="lazy" decoding="async"><span>${String(index + 1).padStart(2,'0')} · ${safeText(screen.title)}</span></button>`;
   }).join('');
   $$('[data-ledgix-screen]').forEach(button => button.addEventListener('click',() => showLedgixScreenshot(Number(button.dataset.ledgixScreen))));
 }
@@ -83,6 +85,7 @@ function showLedgixScreenshot(index) {
   };
   image.onerror = () => { image.hidden = true; status.hidden = false; status.textContent = 'This screenshot could not load. Choose another image, or check ' + ledgixAsset(screen); media.setAttribute('aria-busy','false'); $('#ledgix-zoom').disabled = true; };
   image.alt = screen.title + ' — actual ' + activeShowcase.name + (activeShowcase.key === 'sea-urchin-hunting' ? ' Roblox experience screenshot' : ' application interface with demonstration data');
+  image.loading = 'eager'; image.fetchPriority = 'high';
   image.src = ledgixAsset(screen);
   $('#ledgix-counter').textContent = String(index + 1).padStart(2,'0') + ' / ' + String(ledgixScreenshots.length).padStart(2,'0');
   $('#ledgix-feature-title').textContent = screen.title;
@@ -125,7 +128,9 @@ function openLedgixShowcase(opener, projectName = 'Ledgix') {
   const rarityRow = activeShowcase.rarities ? '<div class="showcase-rarities" role="group" aria-label="Sea urchin rarity tiers">' + activeShowcase.rarities.map(rarity => '<span>' + safeText(rarity) + '</span>').join('') + '</div>' : '';
   const playUrl = activeShowcase.playUrl;
   const playLink = typeof playUrl === 'string' && /^https:\/\/www\.roblox\.com\/games\/\d+(?:\/[^\s]*)?$/.test(playUrl) ? '<a class="button primary showcase-play" href="' + safeText(playUrl) + '" target="_blank" rel="noopener noreferrer">Play on Roblox ↗</a>' : '';
+  const sourceLink = activeShowcase.sourceUrl ? '<a class="button secondary showcase-source" href="' + safeText(activeShowcase.sourceUrl) + '" target="_blank" rel="noopener noreferrer">' + $('.connect-link svg').outerHTML + 'View Source Code</a>' : '';
   $('.ledgix-info').innerHTML = '<div><h3>Key features</h3><ul' + (activeShowcase.featureChips ? ' class="showcase-feature-chips"' : '') + '>' + activeShowcase.features.map(feature => '<li>' + safeText(feature) + '</li>').join('') + '</ul>' + rarityRow + '</div><div><h3>Built with</h3>' + badges(activeShowcase.technologies) + '<p>' + (activeShowcase.key === 'sea-urchin-hunting' ? 'Explore the Roblox experience through real screenshots.' : 'Explore the real interface through screenshots. ' + safeText(activeShowcase.name) + ' is a separate application.') + '</p>' + playLink + '</div>';
+  $('.ledgix-info > div:last-child').insertAdjacentHTML('beforeend',sourceLink);
   $('.ledgix-demo-label').textContent = activeShowcase.key === 'sea-urchin-hunting' ? 'Roblox experience · Static screenshots' : 'Demonstration data · Static application screenshots';
     $('#ledgix-categories').innerHTML = Object.keys(ledgixFilters).map(filter => `<button type="button" data-ledgix-filter="${filter}" aria-pressed="false">${filter}</button>`).join('');
     $$('[data-ledgix-filter]').forEach(button => button.addEventListener('click',() => filterLedgixScreenshots(button.dataset.ledgixFilter)));

@@ -11,8 +11,6 @@ const portfolio = {
     ['▤','MySQL','Database','Organizing and querying structured data.'],
     ['◇','Roblox Studio','Game Development','Building interactive worlds to explore.'],
     ['◐','Lua','Game Development','Scripting the logic behind game experiences.'],
-    ['◈','UI/UX Design','Other Skills','Making interfaces clear, useful, and inviting.'],
-    ['⌘','Networking Fundamentals','Other Skills','Understanding how connected systems communicate.']
   ],
   interests: [
     ['⌨','Coding','Ideas → experiences','I enjoy building applications and transforming ideas into functional experiences.'],
@@ -77,7 +75,7 @@ $('#fact-button').addEventListener('click', () => {
 
 // Native dialogs provide focus trapping and Escape support. Restore the opener explicitly.
 const dialogOpeners = new WeakMap();
-function openDialog(dialog, opener) { dialogOpeners.set(dialog,opener); dialog.showModal(); document.body.classList.add('modal-open'); }
+function openDialog(dialog, opener) { dialogOpeners.set(dialog,opener); dialog.showModal(); document.body.classList.add('modal-open'); $('.dialog-close',dialog).focus({preventScroll:true}); }
 $$('dialog').forEach(dialog => {
   $('.dialog-close', dialog).addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => {
@@ -85,7 +83,7 @@ $$('dialog').forEach(dialog => {
     const bounds = dialog.getBoundingClientRect();
     if(event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
   });
-  dialog.addEventListener('close', () => { document.body.classList.remove('modal-open'); dialogOpeners.get(dialog)?.focus({preventScroll:true}); });
+  dialog.addEventListener('close', () => { document.body.classList.toggle('modal-open',Boolean($('dialog[open]'))); dialogOpeners.get(dialog)?.focus({preventScroll:true}); });
 });
 $$('[data-project]').forEach(button => button.addEventListener('click', () => {
   const project = portfolio.projects[Number(button.dataset.project)];
@@ -356,14 +354,10 @@ document.addEventListener('pointermove',event => {
   pointerScheduled = true;
   requestAnimationFrame(() => { $('.cursor-glow').style.transform = `translate(${event.clientX - 175}px,${event.clientY - 175}px)`; pointerScheduled = false; });
 },{passive:true});
-$('.universe').addEventListener('pointermove',event => {
-  if(motionQuery.matches || !finePointer.matches) return;
-  const rect = $('.universe').getBoundingClientRect();
-  const x = (event.clientX - rect.left) / rect.width - .5, y = (event.clientY - rect.top) / rect.height - .5;
+addDepth($('.universe'),(x,y) => {
   $('#profile-card').style.transform = `rotateY(${x * 12}deg) rotateX(${-y * 10}deg) translate(${x * 5}px,${y * 5}px)`;
   $('#energy-orb span').style.translate = `${x * 4}px ${y * 4}px`;
-});
-$('.universe').addEventListener('pointerleave', () => { $('#profile-card').style.transform = ''; $('#energy-orb span').style.translate = ''; });
+},() => { $('#profile-card').style.transform = ''; $('#energy-orb span').style.translate = ''; });
 motionQuery.addEventListener('change', () => { if(motionQuery.matches) { document.body.classList.remove('js-motion'); $$('.particle').forEach(particle => particle.remove()); } });
 
 

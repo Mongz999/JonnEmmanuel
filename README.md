@@ -1,5 +1,7 @@
 ﻿# JONN. — Beyond the Code.
 
+Official portfolio: [jonnemmanuel.vercel.app](https://jonnemmanuel.vercel.app/)
+
 An interactive personal developer portfolio by **Jonn Emmanuel A. Renejane**, a BS Information Technology student at the University of Cebu in Cebu City, Philippines.
 
 Built with HTML, CSS, and vanilla JavaScript. No build step, backend, package installation, or framework is required.

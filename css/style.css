@@ -25,7 +25,6 @@ html{scroll-padding-top:calc(var(--header-height) + 20px)}
 .ticker-group{display:flex;align-items:center;justify-content:space-around;flex-shrink:0;gap:32px;min-width:max(100vw,1000px);height:100%;padding:0 24px}
 #header .ticker-group span{color:var(--muted);font-size:10px;letter-spacing:2.5px;font-weight:500}
 .ticker-group i{font-style:normal;color:var(--accent);font-size:11px}
-#header:hover .ticker-track,#header:focus-within .ticker-track{animation-play-state:paused}
 @keyframes ticker-travel{to{transform:translateX(-50%)}}
 
 /* Layered aurora and a quick, non-blocking name reveal reuse the existing hero. */
@@ -337,6 +336,8 @@ footer>.wrap>.button{align-self:center}
 .ledgix-info ul{columns:2;padding-left:17px;margin:0;color:var(--muted);font-size:11px;line-height:2}
 .ledgix-info li{break-inside:avoid}
 .ledgix-info p{font-size:11px;margin-top:15px}
+.showcase-source{margin-top:16px;gap:10px;max-width:100%;flex-wrap:wrap}
+.showcase-source svg{flex-shrink:0}
 #ledgix-dialog.is-zoomed{width:min(1700px,calc(100% - 24px))}
 .ledgix-media.is-zoomed{display:block;height:65svh;overflow:auto;overscroll-behavior:contain;touch-action:pan-x pan-y}
 .ledgix-media.is-zoomed>img{width:auto;height:auto;max-width:none;max-height:none;object-fit:contain}
@@ -406,6 +407,12 @@ footer>.wrap>.button{align-self:center}
 .connect-link:hover{box-shadow:0 8px 28px #8b5cf633}
 /* Allow long skill names to wrap instead of pushing narrow cards past their grid. */
 .skill-card{min-width:0}.skill-head>div{min-width:0;overflow-wrap:anywhere}
+/* Reserve scrollbar space when native dialogs lock background scrolling. */
+html{scrollbar-gutter:stable}
+@media(pointer:coarse){
+ .dialog-close.icon-button{width:44px;height:44px}
+ .project-button,#ledgix-zoom{min-height:44px}
+}
 @media(max-width:800px){
  .connect-section{padding-block:40px}
  .connect-card{flex-direction:column;align-items:flex-start;padding:25px;gap:24px}
