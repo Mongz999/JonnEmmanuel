@@ -251,6 +251,7 @@ motionQuery.addEventListener('change',() => { if(motionQuery.matches) selectJour
 document.addEventListener('visibilitychange',() => { if(document.hidden) selectJourneyChapter(activeChapter,true); });
 
 // One reusable observer reveals content once; HTML stays visible without JavaScript.
+let recoverScrollReveals = () => {};
 function initializeScrollReveals() {
   if(!('IntersectionObserver' in window) || motionQuery.matches) return;
   const groups = [
@@ -259,21 +260,24 @@ function initializeScrollReveals() {
     '.about-visual img, .about-visual > div > *',
     '.skills-grid > *, .interests-grid > *, .projects-grid > *',
     '.journey-hint, .journey-route, .journey-panel',
+    '.connect-link',
     'footer > .wrap > *'
   ];
   const targets = [...new Set(groups.flatMap(selector => $$(selector)))];
   let observer;
+  const pending = new Set();
   const reveal = element => {
     element.classList.add('is-revealed');
+    pending.delete(element);
     observer.unobserve(element);
   };
   try {
     observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        // Initial notifications can be intersecting below the configured threshold.
-        if(entry.isIntersecting && entry.intersectionRatio >= .15) reveal(entry.target);
+        // A visible slice is enough, including for panels taller than the viewport.
+        if(entry.isIntersecting && entry.intersectionRect.height > 0) reveal(entry.target);
       });
-    }, {threshold:.15,rootMargin:'0px 0px -64px 0px'});
+    }, {threshold:0,rootMargin:'0px 0px -32px 0px'});
     targets.forEach(element => {
       element.classList.add('scroll-reveal');
       const siblings = [...element.parentElement.children];
@@ -283,25 +287,34 @@ function initializeScrollReveals() {
     // Only content actually on the initial screen bypasses its entrance animation.
     const viewportHeight = document.documentElement.clientHeight || innerHeight;
     const headerBottom = $('#header').getBoundingClientRect().bottom;
-    const pending = [];
     targets.forEach(element => {
       const rect = element.getBoundingClientRect();
       const visibleHeight = Math.min(rect.bottom,viewportHeight) - Math.max(rect.top,headerBottom);
       if(rect.height > 0 && visibleHeight >= Math.min(rect.height * .15,viewportHeight * .15)) {
         element.classList.add('is-revealed');
       } else {
-        pending.push(element);
+        pending.add(element);
       }
     });
     // Establish the hidden baseline before the observer can activate any entrance.
     // A committed style is needed even when initialization and the first IO delivery
     // happen within the same rendering cycle (for example, a cached local page).
     document.body.classList.add('scroll-motion');
-    if(pending.length) getComputedStyle(pending[0]).opacity;
+    if(pending.size) getComputedStyle(pending.values().next().value).opacity;
     pending.forEach(element => observer.observe(element));
+    // Reuse the existing throttled scroll/resize handler as a fail-open recovery.
+    // This also catches restored scroll positions and elements skipped by a fast jump.
+    recoverScrollReveals = () => {
+      const bottom = (document.documentElement.clientHeight || innerHeight) - 32;
+      pending.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        if(rect.height > 0 && rect.top < bottom) reveal(element);
+      });
+    };
   } catch {
     observer?.disconnect();
     document.body.classList.remove('scroll-motion');
+    recoverScrollReveals = () => {};
     return;
   }
   document.addEventListener('focusin',event => {
@@ -313,12 +326,15 @@ function initializeScrollReveals() {
     document.body.classList.remove('scroll-motion');
     targets.forEach(element => element.classList.add('is-revealed'));
     observer.disconnect();
+    pending.clear();
+    recoverScrollReveals = () => {};
   });
 }
 initializeScrollReveals();
 const sections = $$('main > section');
 let scrollScheduled = false;
 function updateScroll() {
+  recoverScrollReveals();
   const max = document.documentElement.scrollHeight - innerHeight;
   $('#scroll-progress').style.width = `${max > 0 ? scrollY / max * 100 : 0}%`;
   $('#header').classList.toggle('scrolled',scrollY > 20);
@@ -328,7 +344,9 @@ function updateScroll() {
   scrollScheduled = false;
 }
 addEventListener('scroll', () => { if(!scrollScheduled) { scrollScheduled = true; requestAnimationFrame(updateScroll); } },{passive:true});
-addEventListener('resize',updateScroll); updateScroll();
+addEventListener('resize',updateScroll);
+addEventListener('pageshow',() => requestAnimationFrame(updateScroll));
+updateScroll();
 const roles = ['IT Student','Developer','Creative Thinker','Game Creator']; let roleIndex = 0;
 setInterval(() => { if(document.hidden || motionQuery.matches) return; roleIndex = (roleIndex + 1) % roles.length; $('#role').textContent = roles[roleIndex]; $('#role').animate([{opacity:0,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:350}); },2800);
 for(let i = 0; i < (finePointer.matches ? 24 : 12); i++) { const star = document.createElement('i'); star.style.cssText = `left:${(i * 37 + 11) % 100}%;top:${(i * 23 + 7) % 100}%;animation-delay:-${i % 6}s`; $('.stars').append(star); }
@@ -378,6 +396,7 @@ addDepth($('#home'),(x,y) => {
 },() => { $('.hero-atmosphere').style.transform = ''; });
 function syncVisibility() {
   document.body.classList.toggle('page-hidden',document.hidden);
-  if(document.hidden) { $('.particle').forEach(particle => particle.remove()); }
+  if(document.hidden) { $$('.particle').forEach(particle => particle.remove()); }
+  else requestAnimationFrame(recoverScrollReveals);
 }
 document.addEventListener('visibilitychange',syncVisibility); syncVisibility();
