@@ -405,6 +405,23 @@ footer>.wrap>.button{align-self:center}
 .connect-link{flex-shrink:0;gap:12px;font-size:12px;max-width:100%;background:var(--deep)}
 .connect-link svg{flex-shrink:0}
 .connect-link:hover{box-shadow:0 8px 28px #8b5cf633}
+.connect-actions{display:flex;flex-direction:column;align-items:stretch;gap:12px;min-width:0;max-width:100%}
+.connect-actions .connect-link{align-self:stretch;flex-shrink:1}
+.connect-actions .email-link{background:var(--glass)}
+.contact-email{font-size:12px;color:var(--muted);text-align:center;overflow-wrap:anywhere;user-select:all}
+.showcase-overview-label{font-size:13px;margin-bottom:8px;color:var(--text)}
+.case-study-block{min-width:0}
+.case-study-block p{margin-top:0}
+/* Mobile previews follow each screenshot's own proportions; desktop rules stay intact. */
+@media(max-width:768px){
+ #projects .projects-grid{grid-template-columns:minmax(0,1fr);gap:20px}
+ #projects .project-card{display:block;min-width:0}
+ #projects .project-image{height:auto;aspect-ratio:auto;display:grid;place-items:center;padding:clamp(8px,2.5vw,18px)}
+ #projects .project-image img{display:block;width:100%;height:auto;max-width:100%;object-fit:contain}
+ #projects .project-body{min-width:0;padding:22px;overflow-wrap:anywhere}
+ #back-top{width:40px;height:40px;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom))}
+ body.modal-open #back-top{visibility:hidden;opacity:0;pointer-events:none}
+}
 /* Allow long skill names to wrap instead of pushing narrow cards past their grid. */
 .skill-card{min-width:0}.skill-head>div{min-width:0;overflow-wrap:anywhere}
 /* Reserve scrollbar space when native dialogs lock background scrolling. */

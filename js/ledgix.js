@@ -14,6 +14,12 @@ const projectShowcases = {
   'Sea Urchin Hunting': {
     name:'Sea Urchin Hunting',key:'sea-urchin-hunting',type:'Roblox Underwater Exploration Game',tagline:'Dive deeper. Discover rarer.',
     description:'Sea Urchin Hunting is a Roblox underwater exploration and collection game where players discover sea urchins of different rarities, explore mysterious ocean environments, upgrade their equipment, and manage oxygen while diving.',
+    caseStudy:[
+      ['Problem or Purpose','Give Roblox players an underwater exploration loop built around finding sea urchins, managing oxygen, and choosing catching equipment.'],
+      ['My Role','One of the developers on a game built with friends.'],
+      ['Development Challenges','Modeling the catching nets and sea urchins, along with designing the game environments and caves, were key development challenges.'],
+      ['Outcome','The existing showcase presents exploration, equipment, and a seven-tier rarity system through three real screenshots.']
+    ],
     directory:'assets/projects/sea-urchin-hunting/',
     screenshots:[
       {file:'roblox-game-page.png',title:'Discover Sea Urchin Hunting',category:'Roblox Experience',description:"The official Roblox experience page introduces players to the game's underwater adventure, collection mechanics, and rarity system."},
@@ -28,15 +34,27 @@ const projectShowcases = {
   },
   Ledgix: {
     name:'Ledgix', key:'ledgix', type:'Accounting Management System', tagline:'Every Entry Counts. Every Balance Matters.',
-    description:'Ledgix is an accounting management application designed to simplify journal recording, account balance verification, and financial reporting through an organized, user-friendly interface.',
+    description:'Ledgix is an offline Windows accounting application that brings company workspaces, journal entries, ledger review, trial balances, and financial statements into one workflow.',
+    caseStudy:[
+      ['Problem or Purpose','Help people working through a company accounting cycle keep balanced records, calculate merchandise inventory costs, and prepare reports without relying on separate manual worksheets.'],
+      ['My Role','I worked as a developer on Ledgix.'],
+      ['Challenges and Solutions','The documented reporting workflow separates posted entries from the period-end inventory worksheet to avoid duplicate adjustments. Consistent SQLite backups and duplicate checks during restore protect existing workspace records.'],
+      ['Outcome','One local workflow connects transaction entry, accounting reports, and PDF, Excel, or JSON exports. Records remain available offline, with database backup and restore options.']
+    ],
     directory:'assets/projects/ledgix/',screenshots:ledgixDefaultScreenshots,filters:ledgixDefaultFilters,
     sourceUrl:'https://github.com/Mongz999/ledgix',
-    technologies:['HTML','CSS','JavaScript'],
-    features:['Journal entry management','Compound accounting entries','Merchandise and credit transactions','Trial balance verification','Adjusting journal entries','Financial statement generation','Saved journal workspaces','Local data backup and restore']
+    technologies:['Electron','React','Node.js','SQLite'],
+    features:['General journal and compound entries','Debit and credit validation','Ledger and trial balance review','Adjusting journal entries','Financial statement generation','Periodic merchandise inventory calculations','Company workspaces','PDF and Excel exports','Database backup and restore']
   },
   'BURP!': {
     name:'BURP!', key:'burp',type:'Canteen Point-of-Sale System',tagline:'Good Food, Good Mood!',
     description:'BURP! is a desktop-based canteen point-of-sale system designed to simplify food ordering, cart management, checkout calculations, and transaction recording through an organized interface.',
+    caseStudy:[
+      ['Problem or Purpose','Help canteen staff select products, manage quantities, calculate checkout totals, and keep transaction records in a single desktop interface.'],
+      ['My Role','Author of the BURP! canteen point-of-sale system.'],
+      ['Challenges and Solutions','Cart updates feed a shared totals calculation, which applies VAT before checkout. Parameterized database queries connect login, registration, and account-specific order history to the local Access database.'],
+      ['Outcome','The application brings menu selection, cart handling, payment calculations, receipt printing, and transaction history together, with login and registration for user accounts.']
+    ],
     directory:'assets/projects/burp/',
     sourceUrl:'https://github.com/Mongz999/BURPSystem',
     screenshots:[
@@ -44,7 +62,7 @@ const projectShowcases = {
       {file:'login-screen.png',title:'Login Screen',category:'User Access',description:'Access the canteen management system through a dedicated username and password login interface.'}
     ],
     filters:{'All Screenshots':[0,1]},technologies:['C# Windows Forms','Microsoft Access'],
-    features:['User login','Product search','Food category filtering','Product selection and quantity','Shopping cart management','VAT and total calculations','Cash payment and change calculation','Receipt printing','Transaction history access','Profile controls']
+    features:['User login and registration','Product search','Food category filtering','Product selection and quantity','Shopping cart management','VAT and total calculations','Cash payment and change calculation','Receipt printing','Transaction history access','Profile controls']
   }
 };
 let activeShowcase = projectShowcases.Ledgix;
@@ -129,8 +147,9 @@ function openLedgixShowcase(opener, projectName = 'Ledgix') {
   const playUrl = activeShowcase.playUrl;
   const playLink = typeof playUrl === 'string' && /^https:\/\/www\.roblox\.com\/games\/\d+(?:\/[^\s]*)?$/.test(playUrl) ? '<a class="button primary showcase-play" href="' + safeText(playUrl) + '" target="_blank" rel="noopener noreferrer">Play on Roblox ↗</a>' : '';
   const sourceLink = activeShowcase.sourceUrl ? '<a class="button secondary showcase-source" href="' + safeText(activeShowcase.sourceUrl) + '" target="_blank" rel="noopener noreferrer">' + $('.connect-link svg').outerHTML + 'View Source Code</a>' : '';
-  $('.ledgix-info').innerHTML = '<div><h3>Key features</h3><ul' + (activeShowcase.featureChips ? ' class="showcase-feature-chips"' : '') + '>' + activeShowcase.features.map(feature => '<li>' + safeText(feature) + '</li>').join('') + '</ul>' + rarityRow + '</div><div><h3>Built with</h3>' + badges(activeShowcase.technologies) + '<p>' + (activeShowcase.key === 'sea-urchin-hunting' ? 'Explore the Roblox experience through real screenshots.' : 'Explore the real interface through screenshots. ' + safeText(activeShowcase.name) + ' is a separate application.') + '</p>' + playLink + '</div>';
+  $('.ledgix-info').innerHTML = '<div><h3>Key features</h3><ul' + (activeShowcase.featureChips ? ' class="showcase-feature-chips"' : '') + '>' + activeShowcase.features.map(feature => '<li>' + safeText(feature) + '</li>').join('') + '</ul>' + rarityRow + '</div><div><h3>Technologies Used</h3>' + badges(activeShowcase.technologies) + '<p>' + (activeShowcase.key === 'sea-urchin-hunting' ? 'Explore the Roblox experience through real screenshots.' : 'Explore the real interface through screenshots. ' + safeText(activeShowcase.name) + ' is a separate application.') + '</p>' + playLink + '</div>';
   $('.ledgix-info > div:last-child').insertAdjacentHTML('beforeend',sourceLink);
+  $('.ledgix-info').insertAdjacentHTML('beforeend',(activeShowcase.caseStudy || []).map(([heading,text]) => '<div class="case-study-block"><h3>' + safeText(heading) + '</h3><p>' + safeText(text) + '</p></div>').join(''));
   $('.ledgix-demo-label').textContent = activeShowcase.key === 'sea-urchin-hunting' ? 'Roblox experience · Static screenshots' : 'Demonstration data · Static application screenshots';
     $('#ledgix-categories').innerHTML = Object.keys(ledgixFilters).map(filter => `<button type="button" data-ledgix-filter="${filter}" aria-pressed="false">${filter}</button>`).join('');
     $$('[data-ledgix-filter]').forEach(button => button.addEventListener('click',() => filterLedgixScreenshots(button.dataset.ledgixFilter)));
