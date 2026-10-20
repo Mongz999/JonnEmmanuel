@@ -1,4 +1,4 @@
-﻿/* Edit portfolio content here. Biography and education are in index.html. */
+/* Edit portfolio content here. Biography and education are in index.html. */
 const portfolio = {
   facts: ['I enjoy playing badminton.', 'I love exploring computer hardware.', 'I enjoy developing games in Roblox Studio.', 'I like creating interactive applications.', 'My favorite color is purple/violet.'],
   skills: [
@@ -92,30 +92,6 @@ $$('[data-project]').forEach(button => button.addEventListener('click', () => {
   openDialog($('#project-dialog'), button);
 }));
 
-const commands = {
-  whoami:'Jonn Emmanuel — IT Student & Developer',
-  skills:'HTML, CSS, JavaScript, Python, Java, C#, MySQL, Lua',
-  interests:'Programming, Gaming, Badminton, Technology, Design',
-  favoritecolor:'Purple/Violet — obviously!',
-  mission:'Turning imagination into reality.',
-  help:'Available commands: whoami, skills, interests, favoritecolor, mission, help. Type a command or select a suggestion.'
-};
-$('#command-suggestions').innerHTML = Object.keys(commands).map(command => `<button type="button" data-command="${command}">${command}</button>`).join('');
-function runCommand(raw) {
-  const command = raw.trim().toLowerCase();
-  if(!command) { $('#terminal-input').focus(); return; }
-  const output = document.createElement('p');
-  output.textContent = `visitor ~ $ ${raw.trim()}\n${Object.hasOwn(commands,command) ? commands[command] : `Command not found: ${command}. Try “help” or choose a suggestion above.`}`;
-  $('#terminal-output').append(output);
-  // Keep repeated exploration lightweight.
-  if($('#terminal-output').children.length > 40) $('#terminal-output').firstElementChild.remove();
-  $('#terminal-output').scrollTop = $('#terminal-output').scrollHeight;
-  $('#terminal-input').value = ''; $('#terminal-input').focus();
-}
-$('#terminal-open').addEventListener('click', event => { openDialog($('#terminal-dialog'),event.currentTarget); $('#terminal-input').focus(); });
-$('#terminal-form').addEventListener('submit',event => { event.preventDefault(); runCommand($('#terminal-input').value); });
-$$('[data-command]').forEach(button => button.addEventListener('click', () => runCommand(button.dataset.command)));
-
 let toastTimer;
 function notify(message) { clearTimeout(toastTimer); $('#toast').textContent = message; $('#toast').classList.add('visible'); toastTimer = setTimeout(() => $('#toast').classList.remove('visible'),5000); }
 function burst(x,y) {
@@ -129,7 +105,6 @@ function burst(x,y) {
     document.body.append(particle); particle.addEventListener('animationend', () => particle.remove(), {once:true}); setTimeout(() => particle.remove(),1200);
   }
 }
-$('#energy-orb').addEventListener('click', () => { const rect = $('#energy-orb').getBoundingClientRect(); burst(rect.left + rect.width / 2,rect.top + rect.height / 2); notify('Welcome to my universe. There’s more to discover.'); });
 
 // Cosmic Journey uses one persistent panel and the existing scroll observer.
 const journeyChapters = [
@@ -357,10 +332,6 @@ document.addEventListener('pointermove',event => {
   pointerScheduled = true;
   requestAnimationFrame(() => { $('.cursor-glow').style.transform = `translate(${event.clientX - 175}px,${event.clientY - 175}px)`; pointerScheduled = false; });
 },{passive:true});
-addDepth($('.universe'),(x,y) => {
-  $('#profile-card').style.transform = `rotateY(${x * 12}deg) rotateX(${-y * 10}deg) translate(${x * 5}px,${y * 5}px)`;
-  $('#energy-orb span').style.translate = `${x * 4}px ${y * 4}px`;
-},() => { $('#profile-card').style.transform = ''; $('#energy-orb span').style.translate = ''; });
 motionQuery.addEventListener('change', () => { if(motionQuery.matches) { document.body.classList.remove('js-motion'); $$('.particle').forEach(particle => particle.remove()); } });
 
 
